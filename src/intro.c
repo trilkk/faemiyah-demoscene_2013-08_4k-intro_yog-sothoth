@@ -1582,7 +1582,7 @@ void _start()
     // video
     for(;;)
     {
-      unsigned ticks = (unsigned)((double)frame_idx / 60.0 * 44100.0);
+      unsigned ticks = (unsigned)((double)frame_idx / 60.0 * 88200.0);
 
       if(ticks > INTRO_LENGTH)
       {
