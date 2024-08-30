@@ -1495,7 +1495,7 @@ void _start()
     dlGenTextures(1, &useless);
 #endif
     dlBindTexture(GL_TEXTURE_2D_MULTISAMPLE, g_fbo_texture);
-    dlTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, AA_LEVEL, GL_RGBA, screen_w, screen_h, GL_FALSE);
+    dlTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, AA_LEVEL, GL_RGBA, screen_w, screen_h, GL_TRUE);
 
     dlGenRenderbuffersEXT(1, &renderbuffer);
     dlBindRenderbufferEXT(GL_RENDERBUFFER, renderbuffer);
@@ -1510,6 +1510,18 @@ void _start()
     dlFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D_MULTISAMPLE,
         g_fbo_texture, 0);
     dlFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer);
+
+#if defined(USE_LD)
+    {
+        GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        if (status != GL_FRAMEBUFFER_COMPLETE)
+        {
+            fprintf(stderr, "glCheckFramebufferStatus(): 0x%x\n", status);
+            DDL_Quit();
+            return 0;
+        }
+    }
+#endif
 
 #if defined(USE_LD)
     dlGenTextures(1, &g_volume_texture);
